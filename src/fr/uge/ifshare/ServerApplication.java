@@ -1,6 +1,7 @@
 package fr.uge.ifshare;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
 import java.util.List;
 
 import fr.uge.common.IEmployee;
@@ -9,37 +10,19 @@ import fr.uge.common.IProduit;
 import fr.uge.eifeil_corp.Employee;
 
 public class ServerApplication {
-	
-	public static void main(String[] args) {
-		
-		 try {
-		 IMarket market = (IMarket) Naming.lookup("IfShareMarket");
-		 
-		 market.getProduitDisponible();
-		 
-		 IEmployee empl = new Employee("Djahida", "Harouche");
-		 IProduit prod =  new Produit("Bike", 199);
-		 
-		 market.vendreProduit(prod, empl);
-		 List<IProduit> listProduits =  market.getProduitDisponible();
-		 System.out.println( "Liste des produits à vendre "+listProduits.size()+" :\n");
-		 listProduits.forEach(p -> {
-			try {
-				System.out.println(p.getName());
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		});
-
-		 market.acheterProduit(listProduits.get(0), empl);
-		 
-	
-		
-		 }
-		 catch (Exception e) {
-		 System.out.println("Trouble " + e);
-		 }
-		 }
+			
+		 public static void main(String args[]) {
+			 try {
+			  
+			  IMarket market = new Market();
+			  LocateRegistry.createRegistry(1099);
+			  Naming.rebind("IfShareMarket", market);
+			  // Naming.rebind("rmi://localhost/IfShareMarket", market);
+			  
+			  }
+			  catch (Exception e) {
+			  System.out.println("Trouble: " + e);
+			  }
+			 }
 
 }

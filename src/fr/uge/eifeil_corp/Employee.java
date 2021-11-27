@@ -44,6 +44,13 @@ public class Employee extends UnicastRemoteObject implements IEmployee{
 	public long getId() throws RemoteException{
 		return id;
 	}
+
+	@Override
+	public void onDisponible(IProduit produit) throws RemoteException {
+		System.out.println("Produit dispo :" + produit.getName());
+		
+	
+	}
     
     
 

@@ -9,6 +9,8 @@ public interface IEmployee extends Remote{
 	public String getPrenom() throws RemoteException;
 
 	public String getNom() throws RemoteException;
+	
+	public void onDisponible(IProduit produit) throws RemoteException;
 
 
 }

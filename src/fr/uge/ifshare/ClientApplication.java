@@ -32,7 +32,7 @@ public class ClientApplication {
 			}
 		});
 
-		 market.acheterProduit(listProduits.get(0).getProductId());
+		 market.acheterProduit(listProduits.get(0), empl);
 		 
 	
 		

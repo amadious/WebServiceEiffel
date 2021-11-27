@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import fr.uge.common.IEmployee;
 import fr.uge.common.IMarket;
+import fr.uge.common.IObs;
 import fr.uge.common.IProduit;
 
 public class Market extends UnicastRemoteObject implements IMarket {
@@ -20,6 +21,7 @@ public class Market extends UnicastRemoteObject implements IMarket {
 	private static final long serialVersionUID = 1L;
 	private ConcurrentHashMap<Long, List<IProduit>> products = new ConcurrentHashMap<>(); // id de l'employer vers list
 																							// de produit
+	private final IObs obs= new Obs();
 
 	public Market() throws RemoteException {
 		super();
@@ -27,8 +29,14 @@ public class Market extends UnicastRemoteObject implements IMarket {
 	}
 
 	@Override
-	public void acheterProduit(Long IdProduit) throws RemoteException {
-
+	public void acheterProduit(IProduit produit, IEmployee employee) throws RemoteException {
+		if(! getProduitDisponible().contains(produit)) {
+			obs.register(employee, produit);
+		}
+		else {
+			//products.get(employee.getId()).ge
+			
+		}
 	}
 
 	@Override
@@ -43,6 +51,8 @@ public class Market extends UnicastRemoteObject implements IMarket {
 			v.add(produit);
 			return v;
 		});
+		
+		obs.disponible(produit);
 
 	}
 

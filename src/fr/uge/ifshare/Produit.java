@@ -5,6 +5,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
+import fr.uge.common.IEmployee;
 import fr.uge.common.IProduit;
 
 public class Produit extends UnicastRemoteObject implements IProduit{
@@ -17,6 +18,7 @@ public class Produit extends UnicastRemoteObject implements IProduit{
 	private Long productId;
 	private String name;
 	private double price;
+	private IEmployee vendeur;
 	
 	
 	public Produit(String name, double price) throws RemoteException {
@@ -67,6 +69,14 @@ public class Produit extends UnicastRemoteObject implements IProduit{
 	public String toString(){
 		return "Product [productId=" + productId + ", name=" + name + ", price="
 				+ price + "]";
+	}
+
+	public IEmployee getVendeur() {
+		return vendeur;
+	}
+
+	public void setVendeur(IEmployee vendeur) {
+		this.vendeur = vendeur;
 	}
 	
 

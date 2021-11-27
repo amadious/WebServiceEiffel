@@ -9,7 +9,6 @@ import fr.uge.common.IEmployee;
 import fr.uge.common.IProduit;
 
 
-
 public class Produit extends UnicastRemoteObject implements IProduit{
 	
 	/**

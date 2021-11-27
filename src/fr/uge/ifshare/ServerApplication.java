@@ -8,7 +8,7 @@ import fr.uge.common.IMarket;
 import fr.uge.common.IProduit;
 import fr.uge.eifeil_corp.Employee;
 
-public class ClientApplication {
+public class ServerApplication {
 	
 	public static void main(String[] args) {
 		

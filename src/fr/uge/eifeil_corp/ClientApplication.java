@@ -5,7 +5,7 @@ import java.rmi.registry.LocateRegistry;
 import fr.uge.common.IMarket;
 import fr.uge.ifshare.Market;
 
-public class ServerApplication {
+public class ClientApplication {
 	
 	 public static void main(String args[]) {
 		 try {

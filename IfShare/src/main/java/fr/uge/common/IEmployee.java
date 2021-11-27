@@ -12,5 +12,7 @@ public interface IEmployee extends Remote{
 	
 	public void onDisponible(IProduit produit) throws RemoteException;
 
+	public void a_achete(IProduit produit) throws RemoteException;
+
 
 }

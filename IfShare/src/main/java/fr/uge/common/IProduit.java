@@ -15,6 +15,5 @@ public interface IProduit  extends Remote{
 	public double getPrice()throws RemoteException;
 	
 	public void setPrice(double price)throws RemoteException;	
-	public IEmployee getVendeur() throws RemoteException;
 
 }

@@ -1,0 +1,40 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from AccountBalanceService WSDL service -->
+
+  <service name="AccountBalance" provider="java:RPC" style="wrapped" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://accountSolde"/>
+      <parameter name="wsdlServiceElement" value="AccountBalanceService"/>
+      <parameter name="schemaQualified" value="http://accountSolde"/>
+      <parameter name="wsdlServicePort" value="AccountBalance"/>
+      <parameter name="className" value="accountSolde.AccountBalanceSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="AccountBalance"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation name="transfert" qname="operNS:transfert" xmlns:operNS="http://accountSolde" soapAction="" >
+        <parameter qname="pns:id" xmlns:pns="http://accountSolde" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:val" xmlns:pns="http://accountSolde" type="tns:double" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getMoney" qname="operNS:getMoney" xmlns:operNS="http://accountSolde" returnQName="retNS:getMoneyReturn" xmlns:retNS="http://accountSolde" returnType="rtns:double" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:id" xmlns:pns="http://accountSolde" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="pay" qname="operNS:pay" xmlns:operNS="http://accountSolde" returnQName="retNS:payReturn" xmlns:retNS="http://accountSolde" returnType="rtns:boolean" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:id" xmlns:pns="http://accountSolde" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:val" xmlns:pns="http://accountSolde" type="tns:double" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="addClient" qname="operNS:addClient" xmlns:operNS="http://accountSolde" soapAction="" >
+        <parameter qname="pns:id" xmlns:pns="http://accountSolde" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="addClient transfert pay getMoney"/>
+
+  </service>
+</deployment>

@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import fr.uge.common.IEmployee;
 import fr.uge.common.IMarket;
@@ -19,7 +21,7 @@ public class Market extends UnicastRemoteObject implements IMarket {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private final List<IProduit> products = new ArrayList<>();
+	private final ConcurrentHashMap<Long, IProduit> products = new ConcurrentHashMap<>();
 	private final Set<IProduit> prodsVendus = new HashSet<>();
 	private final IObs obs;
 
@@ -30,45 +32,44 @@ public class Market extends UnicastRemoteObject implements IMarket {
 
 	@Override
 	public void acheterProduit(IProduit produit, IEmployee employee) throws RemoteException {
-		if (!getProduitDisponible().contains(produit)) {
+		if (products.get(produit.getProductId()) ==  null) {
+			System.out.println(employee.getNom() + " en attente du produit " + produit.getName());
 			obs.register(employee, produit);
 			return;
 		}
-		int index = findByNameAndSeller(produit);
-		if (index > 0) {
-			prodsVendus.add(products.remove(index)); // on supp et on l'ajoute aux produit vendu
-		}
-	}
+		IProduit p = products.remove(produit.getProductId());
+		employee.a_achete(p);
+		prodsVendus.add(p); // on supp et on l'ajoute aux produit vendu
+		System.out.println(employee.getNom() + " a achetÃ© le produit " + produit.getName());
 
-	// return -1 si pas trouvé.
-	private int findByNameAndSeller(IProduit p) throws RemoteException {
-		int i = 0;
-		for (IProduit curr : products) {
-			if (Objects.equals(p.getName(), curr.getName()) && Objects.equals(p.getVendeur(), curr.getVendeur())) {
-				return i;
-			}
-			++i;
-		}
-		return -1;
 	}
 
 	@Override
 	public void vendreProduit(IProduit produit, IEmployee employee) throws RemoteException {
 		Objects.requireNonNull(employee);
 		Objects.requireNonNull(produit);
-		products.add(produit);
+		products.put(produit.getProductId(), produit);
 		obs.disponible(produit, this);
 
 	}
 
-	public IProduit getProduit(Long IdProduit) throws RemoteException {
-		return null; //TODO remove ?
+	@Override
+	public void vendreProduit(IProduit produit) throws RemoteException {
+		Objects.requireNonNull(produit);
+		products.put(produit.getProductId(), produit);
+		obs.disponible(produit, this);
+
+	}
+
+	public IProduit getProduit(Long idProduit) throws RemoteException {
+			return products.get(idProduit);
+
 
 	}
 
 	@Override
 	public List<IProduit> getProduitDisponible() throws RemoteException {
-		return products;
+		return products.values().stream().collect(Collectors.toList());
 	}
 
 	public Set<IProduit> getProdsVendus() {

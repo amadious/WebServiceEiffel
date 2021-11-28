@@ -1,0 +1,9 @@
+eclipse.preferences.version=1
+encoding//src/accountSolde/AccountBalance.java=UTF-8
+encoding//src/accountSolde/AccountBalanceService.java=UTF-8
+encoding//src/accountSolde/AccountBalanceServiceLocator.java=UTF-8
+encoding//src/accountSolde/AccountBalanceSoapBindingStub.java=UTF-8
+encoding//src/currencyService/Convertisseur.java=UTF-8
+encoding//src/currencyService/ConvertisseurService.java=UTF-8
+encoding//src/currencyService/ConvertisseurServiceLocator.java=UTF-8
+encoding//src/currencyService/ConvertisseurSoapBindingStub.java=UTF-8

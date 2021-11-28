@@ -2,10 +2,12 @@ package fr.uge.rmi;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
-import fr.uge.common.IEmployee;
+import fr.uge.common.IAvisProduit;
 import fr.uge.common.IProduit;
 
 
@@ -19,18 +21,30 @@ public class Produit extends UnicastRemoteObject implements IProduit{
 	private Long productId;
 	private String name;
 	private double price;
-	private IEmployee vendeur;
+	private IProduit.States etat = IProduit.States.BON_ETAT; // par defaut
+	private List<IAvisProduit> avis; 
+	 
+	
+	
 	
 	
 	public Produit(String name, double price) throws RemoteException {
+		Objects.requireNonNull(name);
 		if (price <= 0)
         {
-            throw new IllegalArgumentException("Price can't be null");
+            throw new IllegalArgumentException("Price can't be negative");
         }
 		this.productId = generateurId.getAndIncrement();
-		this.name = name;
+		this.name = name.toUpperCase();
 		this.price = price;
+		avis = new ArrayList<>();
 	}
+	
+	public Produit(String name, double price, IProduit.States etat) throws RemoteException {
+		this(name, price);
+		this.setEtat(etat);
+	}
+	
 	
 	public Long getProductId() throws RemoteException {
 		return productId;
@@ -42,7 +56,7 @@ public class Produit extends UnicastRemoteObject implements IProduit{
 		return name;
 	}
 	public void setName(String name) throws RemoteException {
-		this.name = name;
+		this.name = name.toUpperCase();
 	}
 	public double getPrice() throws RemoteException {
 		return price;
@@ -53,7 +67,7 @@ public class Produit extends UnicastRemoteObject implements IProduit{
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name);
+		return Objects.hash(name,productId);
 	}
 	
 	@Override
@@ -62,23 +76,38 @@ public class Produit extends UnicastRemoteObject implements IProduit{
 
           if(obj instanceof Produit && this == obj) return true;
           Produit produit = (Produit)obj;
-          return (name != null && name.equalsIgnoreCase(produit.name));
+          try {
+			return ( productId == produit.getProductId() && name.equalsIgnoreCase(produit.name));
+		} catch (RemoteException e) {
+			return false;
+		}
     }
 	
 
 	@Override
 	public String toString(){
 		return "Product [productId=" + productId + ", name=" + name + ", price="
-				+ price + "]";
+				+ price  + ", etat : "+ etat + "]";
 	}
 
-	public IEmployee getVendeur() {
-		return vendeur;
+
+
+	public void setEtat(IProduit.States etat) throws RemoteException{
+		this.etat = etat;
+	}
+	public States getEtat() throws RemoteException{
+		return etat;
 	}
 
-	public void setVendeur(IEmployee vendeur) {
-		this.vendeur = vendeur;
+	public List<IAvisProduit> getAvis() throws RemoteException{
+		return avis;
 	}
+
+	public void addAvis(IAvisProduit avis) throws RemoteException{
+		Objects.requireNonNull(avis);
+		this.avis.add(avis);
+	}
+
 	
 
 }

@@ -16,7 +16,7 @@ import fr.uge.common.IProduit;
 
 public class Obs extends UnicastRemoteObject implements IObs {
 	private static final long serialVersionUID = 1L;
-	private final HashMap<String,List<IEmployee>> observateurs = new HashMap<>();
+	private final HashMap<IProduit,List<IEmployee>> observateurs = new HashMap<>();
 	
 
 	protected Obs() throws RemoteException {
@@ -26,28 +26,25 @@ public class Obs extends UnicastRemoteObject implements IObs {
 	
 	@Override
 	public void register(IEmployee emp, IProduit produit) throws RemoteException {
-		observateurs.compute(produit.getName(), (k, v) -> {
+		observateurs.compute(produit, (k, v) -> {
 			if(v == null)
 				v = new ArrayList<>(); 
-			//peut etre verifier s'il n'est pas deja en attente
 			v.add(emp);
 			return v;
 		});
 	}
 
-
 	@Override
 	public void disponible(IProduit produit, IMarket market) throws RemoteException {
-		observateurs.get(produit).forEach( empl -> {
-			try {
+				if( observateurs.get(produit) == null )
+					return;
+				
+				IEmployee empl = observateurs.get(produit).remove(0);
+				if(empl == null)
+					return;
+				
 				empl.onDisponible(produit);
-			} catch (RemoteException e) { // TODO ?
-				e.printStackTrace();
-			}
-		});	
+				market.acheterProduit(produit,empl);
 	}
-
-
-
 
 }

@@ -4,6 +4,7 @@ import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 
 import fr.uge.common.*;
+import fr.uge.common.IProduit.States;
 
 
 public class ServerApplication {
@@ -14,8 +15,8 @@ public class ServerApplication {
 			  
 			  IMarket market = new Market();
 			  IProduit velo = new Produit("Velo", 199);
-			  IProduit velo2 = new Produit("Velo2", 300);
-			  IProduit livre = new Produit("Les miserables", 9);
+			  IProduit velo2 = new Produit("Velo2", 300, States.TRES_BON_ETAT);
+			  IProduit livre = new Produit("Les miserables", 9, States.NEUF);
 			  //IProduit velo = new Produit("Velo", 199);
 			  //IProduit velo = new Produit("Velo", 199);
 			  
@@ -23,12 +24,7 @@ public class ServerApplication {
 			  market.vendreProduit(velo);
 			  market.vendreProduit(livre);
 			  
-			  
-			  
-			  
-			  
-			  
-			  
+			
 			  
 			  
 			  LocateRegistry.createRegistry(1099);

@@ -2,7 +2,6 @@ package fr.uge.rmi;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -72,7 +71,7 @@ public class Market extends UnicastRemoteObject implements IMarket {
 		return products.values().stream().collect(Collectors.toList());
 	}
 
-	public Set<IProduit> getProdsVendus() {
+	public Set<IProduit> getProdsVendus() throws RemoteException{
 		return prodsVendus;
 	}
 

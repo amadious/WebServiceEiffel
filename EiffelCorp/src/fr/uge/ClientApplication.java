@@ -13,11 +13,24 @@ public class ClientApplication {
 		 System.out.println( "Liste des produits A  vendre :");
 		 listProduits.forEach(p -> {
 				try {
-					System.out.println(p.getName());
+					System.out.println(p.getName() + " " +p.getPrice()  + " Euros,  etat : " + p.getEtat() );
 				} catch (RemoteException e) {
 					e.printStackTrace();
 				}
 			});
+	}
+	
+	private static void afficherAvis( IProduit p) throws RemoteException {
+		p.getAvis().forEach(a ->{
+
+				try {
+					System.out.println("Avis de " +a.getOwner().getNom() + "."+a.getOwner().getPrenom() );
+					System.out.println( "note : " + a.getNote() + ", " +a.getCommentaire() ) ;
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
+			
+		});
 	}
 
 public static void main(String[] args) {
@@ -34,14 +47,21 @@ public static void main(String[] args) {
 		 afficherProduit(listProduits);
 		 
 		 IProduit p = listProduits.get(0);
-		 market.acheterProduit(p, djahida);
 		 
-		 afficherProduit(market.getProduitDisponible());
+		 market.acheterProduit(p, djahida);
+		 p.addAvis(new AvisProduit("Trop bien ce projet", 5, djahida));
+		 //afficherProduit(market.getProduitDisponible());
 		 
 		 market.acheterProduit(p, galox);
+
 		 market.acheterProduit(p, smail);
 		 market.vendreProduit(p, djahida);
+		 p.addAvis(new AvisProduit("je suis d'accord avec djahida", 4, galox));
 		 market.vendreProduit(p, galox);
+		 
+		 p.addAvis(new AvisProduit("je suis d'accord avec gallox", 4, smail));
+		 
+		 afficherAvis(p);
 		 }
 		 catch (Exception e) {
 		 System.out.println("Trouble " + e);

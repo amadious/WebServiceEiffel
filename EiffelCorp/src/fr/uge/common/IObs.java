@@ -8,5 +8,7 @@ public interface IObs extends Remote {
 	
 	public void register( IEmployee employee, IProduit produit) throws RemoteException; // engistre l'observeur
 	public void disponible(IProduit produit)throws RemoteException;
+	public void disponible(IProduit produit, IMarket market)throws RemoteException;
+
 	
 }
